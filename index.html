@@ -1,0 +1,108 @@
+<!DOCTYPE html >
+<html lang="en">
+<head>
+  <title>Deep Algo Viz</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.7.11/go.js"></script>
+<!--   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ -->  
+ <script src="main.js"></script>
+</head>
+  <body>
+
+  <button id="toggleListener" onclick="toggleLayout()">Horizontal Layout</button>
+  <button id="toggle2Listener" onclick="toggle2Layout()">Vertical Layout</button>
+  <button id="hideListener">Toggle Legend</button>
+  <div id="zoom-buttons">
+  <button id="zoomInListener" onclick="zoomIn()"><i class="material-icons">zoom_in</i></button>
+  <button id="zoomOutListener" onclick="zoomOut()"><i class="material-icons">zoom_out</i></button>
+  </div>
+  <nav id="nav-container">
+    <div class="nav-wrapper" style="z-index: 99999">
+    <form>
+        <div class="input-field">
+          <input id="search" type="search" required>
+          <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+          <i class="material-icons">close</i>
+        </div>
+      </form>
+    </div>
+  </nav>
+
+  <!-- The DIV for the Diagram needs an explicit size or else we won't see anything.
+       This also adds a border to help see the edges of the viewport. -->
+  <div id="myDiagramDiv" style="width: 100vw;height: 100vh; position:fixed; top:0;left:0"></div>
+
+  <div id="sample">
+    <nav id="nav-bottom" class="navbar-header navbar-fixed-bottom">
+      <img src="legend.png" height="42" style="float: right"/>
+    </nav>
+  </div>
+
+<script>
+document.getElementById("zoomInListener").addEventListener("click", zoomIn);
+document.getElementById("zoomOutListener").addEventListener("click", zoomOut);
+document.getElementById("hideListener").addEventListener("click", clickme);
+document.getElementById("toggleListener").addEventListener("click", toggleLayout);
+document.getElementById("toggle2Listener").addEventListener("click", toggle2Layout);
+
+
+
+function toggleLayout() {
+    var $ = go.GraphObject.make;
+    if (myDiagram.layout instanceof go.LayeredDigraphLayout) {
+      myDiagram.layout =
+        $(go.LayeredDigraphLayout,
+          { direction: 90 });
+    } else {
+      myDiagram.layout =
+        $(go.ForceDirectedLayout,
+          {
+            defaultSpringLength: 30,
+            defaultElectricalCharge: 100
+          });
+    }
+  }
+
+function toggle2Layout() {
+    var $ = go.GraphObject.make;
+    if (myDiagram.layout instanceof go.LayeredDigraphLayout) {
+      myDiagram.layout =
+        $(go.LayeredDigraphLayout,
+          { direction: 0 });
+    } else {
+      myDiagram.layout =
+        $(go.ForceDirectedLayout,
+          {
+            defaultSpringLength: 30,
+            defaultElectricalCharge: 100
+          });
+    }
+  }
+
+function zoomIn() {
+  myDiagram.commandHandler.increaseZoom();
+}
+
+function zoomOut() {
+  myDiagram.commandHandler.decreaseZoom();
+}
+
+function clickme() {
+    var x = document.getElementById('sample');
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+    } else {
+        x.style.display = 'none';
+    }
+}
+</script>
+  </body>
+</html>
